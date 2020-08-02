@@ -1,0 +1,73 @@
+{
+  "name": "@rimoe/react-monaco-editor",
+  "version": "4.0.0",
+  "description": "Monaco Editor for React, a combination of react-monaco-editor and @monaco-editor/react.",
+  "main": "lib/index.js",
+  "module": "lib/index.js",
+  "scripts": {
+    "lint": "npx eslint src",
+    "build": "npx babel src --out-dir lib",
+    "prepublish": "npm run lint && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ri-moe/react-monaco-editor.git"
+  },
+  "keywords": [
+    "monaco",
+    "editor",
+    "react",
+    "vscode",
+    "code",
+    "text"
+  ],
+  "author": "wuxianucw",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ri-moe/react-monaco-editor/issues"
+  },
+  "homepage": "https://github.com/Ri-moe/react-monaco-editor",
+  "peerDependencies": {
+    "monaco-editor": "^0.20.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^9.4.0",
+    "babel-eslint": "10.0.3",
+    "babel-jest": "^25.1.0",
+    "eslint": "6.6.0",
+    "eslint-config-react-app": "^5.2.0",
+    "eslint-plugin-flowtype": "4.6.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.18.3",
+    "eslint-plugin-react-hooks": "2.4.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": false
+        }
+      ],
+      "@babel/plugin-transform-runtime"
+    ]
+  },
+  "dependencies": {}
+}

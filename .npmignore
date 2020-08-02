@@ -1,0 +1,16 @@
+npm-debug.log
+yarn-error.log
+.eslintrc.json
+.gitignore
+.npmignore
+.travis.yml
+.vscode/
+
+/demo/
+/src/
+/coverage/
+/node_modules/
+
+__snapshots__
+*.spec.js
+*.spec.js.snap

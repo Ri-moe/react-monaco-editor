@@ -8,6 +8,7 @@ class MonacoEditor extends React.Component {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     loading: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+    failing: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
     value: PropTypes.string,
     defaultValue: PropTypes.string,
     language: PropTypes.string,
@@ -17,6 +18,7 @@ class MonacoEditor extends React.Component {
     editorDidMount: PropTypes.func,
     editorWillMount: PropTypes.func,
     onChange: PropTypes.func,
+    onInitError: PropTypes.func,
     className: PropTypes.string,
     wrapperClassName: PropTypes.string,
   };
@@ -25,6 +27,7 @@ class MonacoEditor extends React.Component {
     width: "100%",
     height: "100%",
     loading: 'Loading...',
+    failing: 'Load failed.',
     value: null,
     defaultValue: "",
     language: "javascript",
@@ -34,6 +37,11 @@ class MonacoEditor extends React.Component {
     editorDidMount: noop,
     editorWillMount: noop,
     onChange: noop,
+    onInitError: (error, handler) => {
+      console.error('Monaco initialization error:', error);
+      if (handler.times <= 3) handler.retry();
+      else handler.setFailing(true);
+    },
   };
 
   constructor(props) {
@@ -45,8 +53,14 @@ class MonacoEditor extends React.Component {
     this._subscription = undefined;
     this.__prevent_trigger_change_event = false;
     this.isMonacoMounting = true;
+    this.errorHandler = {
+      times: 0,
+      retry: () => this.initMonaco(),
+      setFailing: (isFailing) => this.setState({ isFailing }),
+    };
     this.state = {
       isEditorReady: false,
+      isFailing: false,
     };
   }
 
@@ -55,6 +69,8 @@ class MonacoEditor extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.isMonacoMounting || this.state.isFailing) return;
+
     const { value, language, theme, height, options, width } = this.props;
 
     const { editor, monaco } = this;
@@ -94,7 +110,7 @@ class MonacoEditor extends React.Component {
   }
 
   componentWillUnmount() {
-    if (this.isMonacoMounting) this.cancelable.cancel();
+    if (this.isMonacoMounting) this.cancelable && this.cancelable.cancel();
     this.destroyMonaco();
   }
 
@@ -117,6 +133,7 @@ class MonacoEditor extends React.Component {
 
   initMonaco() {
     if (this.containerElement) {
+      this.setState({ isFailing: false });
       this.cancelable = monaco.init();
       this.cancelable
         .then(monaco => {
@@ -139,8 +156,12 @@ class MonacoEditor extends React.Component {
           );
           this.editorDidMount(this.editor);
           this.setState({ isEditorReady: true });
-        }).catch(error => error?.type !== 'cancelation' &&
-          console.error('Monaco initialization: error:', error));
+        }).catch(error => {
+          if (error?.type !== 'cancelation') {
+            this.errorHandler.times++;
+            this.props.onInitError(error, this.errorHandler);
+          }
+        });
     }
   }
 
@@ -168,7 +189,7 @@ class MonacoEditor extends React.Component {
         width={width}
         height={height}
         isEditorReady={this.state.isEditorReady}
-        loading={this.props.loading}
+        loading={this.state.isFailing ? this.props.failing : this.props.loading}
         _ref={this.assignRef}
         className={this.props.className}
         wrapperClassName={this.props.wrapperClassName}

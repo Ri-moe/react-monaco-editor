@@ -1,12 +1,12 @@
 {
   "name": "@rimoe/react-monaco-editor",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Monaco Editor for React, a combination of react-monaco-editor and @monaco-editor/react.",
   "main": "lib/index.js",
   "module": "lib/index.js",
   "scripts": {
     "lint": "npx eslint src",
-    "build": "npx babel src --out-dir lib",
+    "build": "npx babel src --out-dir lib && cp ./src/index.d.ts ./lib/",
     "prepublish": "npm run lint && npm run build"
   },
   "repository": {

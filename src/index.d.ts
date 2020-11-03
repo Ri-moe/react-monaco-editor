@@ -123,7 +123,7 @@ export interface MonacoEditorProps extends MonacoEditorBaseProps {
   onChange?: ChangeHandler;
 }
 
-declare const MonacoEditor: React.FC<MonacoEditorProps>;
+declare const MonacoEditor: React.Component<MonacoEditorProps>;
 
 export default MonacoEditor;
 

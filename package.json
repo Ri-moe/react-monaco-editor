@@ -1,6 +1,6 @@
 {
   "name": "@rimoe/react-monaco-editor",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Monaco Editor for React, a combination of react-monaco-editor and @monaco-editor/react.",
   "main": "lib/index.js",
   "module": "lib/index.js",
